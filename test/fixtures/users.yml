@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  email: MyText
+  favouriteUsers: MyText
+  favouriteBooks: MyText
+  favouriteQuotes: MyText
+  avatar: MyString
+  pinned: MyText
+
+two:
+  username: MyString
+  email: MyText
+  favouriteUsers: MyText
+  favouriteBooks: MyText
+  favouriteQuotes: MyText
+  avatar: MyString
+  pinned: MyText
