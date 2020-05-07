@@ -113,10 +113,56 @@ class UsersController < ApplicationController
           
     end
 
+    def login
+        
+        begin
+            user = User.find_by username: user_params[:username]
+
+            if user.blank?
+
+                render json: {
+                    status: "FAILURE",
+                    message: "No such a user found.",
+                    data: {}
+                }
+            
+            else
+
+                if user.hashedPassword == user_params[:hashedPassword]
+
+                    user.update({
+                        lastLogin: Time.now.utc
+                    })
+
+                    render json: {
+                        status: "SUCCESS",
+                        message: "Login is successful.",
+                        data: user
+                    }
+
+                else
+                    render json: {
+                        status: "FAILURE",
+                        message: "Your password is wrong.",
+                        data: {}
+                    }
+                end
+                
+            end
+            
+        rescue => exception
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: {}
+            }
+        end
+
+    end
 
 
     private def user_params
-        params.require(:user).permit(:username, :email, :favouriteUsers, :favouriteBooks, :favouriteQuotes, :avatar, :pinned)
+        params.require(:user).permit(:username, :email, :favouriteUsers, :favouriteBooks, :favouriteQuotes, :avatar, :pinned, :hashedPassword, :lastLogin)
     end
 
 end
