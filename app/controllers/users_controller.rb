@@ -160,6 +160,36 @@ class UsersController < ApplicationController
 
     end
 
+    def random
+
+        begin
+            quotes = Quote.order("RANDOM()").limit(10)
+            
+            qjson = []
+
+            quotes.each do |quote|
+                book = Book.find(quote.book_id)
+                user = User.find(book.user_id)
+                qjson.append(user: user, book: book, quote: quote)
+            end
+
+            render json: {
+                status: "SUCCESS",
+                message: "10 random quote is selected.",
+                data: qjson
+            }
+        rescue => exception
+            
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: {}
+            }
+
+        end
+
+    end
+
 
     private def user_params
         params.require(:user).permit(:username, :email, :favouriteUsers, :favouriteBooks, :favouriteQuotes, :avatar, :pinned, :hashedPassword, :lastLogin)
