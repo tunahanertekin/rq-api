@@ -115,6 +115,67 @@ class QuotesController < ApplicationController
     end
 
 
+    def random
+
+        begin
+            quotes = Quote.order("RANDOM()").limit(10)
+            
+            qjson = []
+
+            quotes.each do |quote|
+                book = Book.find(quote.book_id)
+                user = User.find(book.user_id)
+                qjson.append(user: user, book: book, quote: quote)
+            end
+
+            render json: {
+                status: "SUCCESS",
+                message: "10 random quotes are listed.",
+                data: qjson
+            }
+        rescue => exception
+            
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: {}
+            }
+
+        end
+
+    end
+
+    def flow
+
+        begin
+            quotes = Quote.order(created_at: :desc).limit(50)
+
+            qjson = []
+
+            quotes.each do |quote|
+                book = Book.find(quote.book_id)
+                user = User.find(book.user_id)
+                qjson.append(user: user, book: book, quote: quote)
+            end
+
+            render json: {
+                status: "SUCCESS",
+                message: "Last 50 quotes are listed.",
+                data: qjson
+            }
+
+        rescue => exception
+
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: {}
+            }
+            
+        end
+
+    end
+
     private def quote_params
         params.require(:quote).permit(:book_id, :title, :body, :owner, :favnum, :page)
     end

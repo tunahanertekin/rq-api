@@ -160,34 +160,30 @@ class UsersController < ApplicationController
 
     end
 
-    def random
-
+    def booksdetail
         begin
-            quotes = Quote.order("RANDOM()").limit(10)
-            
-            qjson = []
+            #details can be added
+            books = User.find(params[:user_id]).books
 
-            quotes.each do |quote|
-                book = Book.find(quote.book_id)
-                user = User.find(book.user_id)
-                qjson.append(user: user, book: book, quote: quote)
+            booksjson = []
+            books.each do |book|
+                booksjson.append(book: book, quoteNum: book.quotes.length())
             end
 
             render json: {
                 status: "SUCCESS",
-                message: "10 random quote is selected.",
-                data: qjson
+                message: "Books and further details are displayed.",
+                data: booksjson,
+                booknum: booksjson.length()
             }
         rescue => exception
-            
             render json: {
                 status: "FAILURE",
                 message: exception.message,
                 data: {}
             }
-
         end
-
+        
     end
 
 
