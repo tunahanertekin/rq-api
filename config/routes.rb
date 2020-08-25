@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   resources :users do
     get 'booksdetail', to: 'users#booksdetail'
     resources :books do
-      resources :quotes
+      get 'quotesdetail', to: 'books#quotesdetail'
+      resources :quotes do
+        get 'detail', to: 'quotes#detail' 
+      end
     end
   end
 end

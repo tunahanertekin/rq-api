@@ -176,6 +176,30 @@ class QuotesController < ApplicationController
 
     end
 
+    def detail
+
+        begin
+            user = User.find(params[:user_id])
+            book = user.books.find(params[:book_id])
+            quote = book.quotes.find(params[:quote_id])
+
+            obj = { user: user, book: book, quote: quote }
+
+            render json: {
+                status: "SUCCESS",
+                message: "Quote is displayed with details.",
+                data: obj
+            }
+        rescue => exception
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: {}
+            }
+        end
+
+    end
+
     private def quote_params
         params.require(:quote).permit(:book_id, :title, :body, :owner, :favnum, :page)
     end

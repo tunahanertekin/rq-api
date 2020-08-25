@@ -147,6 +147,33 @@ class BooksController < ApplicationController
 
     end
 
+    def quotesdetail
+
+        begin
+            user = User.find(params[:user_id])
+            book = user.books.find(params[:book_id])
+            quotes = book.quotes
+
+            quotesjson = []
+            quotes.each do |quote|
+                quotesjson.append(quote: quote, book: book, user: user)
+            end
+
+            render json: {
+                status: "SUCCESS",
+                message: "All quotes are displayed.",
+                data: quotesjson
+            }
+        rescue => exception
+            render json: {
+                status: "FAILURE",
+                message: exception.message,
+                data: []
+            }
+        end
+
+    end
+
 
     
 
