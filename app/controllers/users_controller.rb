@@ -48,7 +48,6 @@ class UsersController < ApplicationController
         begin
 
             user = User.new(user_params)
-            user.hashedPassword = Digest::SHA512.hexdigest user_params[:hashedPassword]
 
             if user.save
                 render json: {
